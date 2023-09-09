@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block stylesheets %}
+<style>
+.fs-1-5{
+    font-size: 1.5rem !important;                                                                                                                                                                                                                                                                                                                                                                                                                                                                     5rem !important;
+}
+</style>
+{% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1 class="text-center">Sign up</h1>
+
+    {{ form_start(registrationForm) }}
+        <div class="">
+            {{ form_errors(registrationForm.email) }}
+        </div>
+        <div class="input-group mb-3" >
+            <div class="input-group-prepend">
+                <span class="input-group-text fs-1-5" id="inputGroup-sizing-default">{{ form_label(registrationForm.email) }}</span>
+            </div>
+                {{ form_widget(registrationForm.email, {'attr': {'class' : 'form-control fs-1-5'}}) }}
+        </div>
+        <div class="text-danger">
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+        <div class="input-group mb-3" >
+            <div class="input-group-prepend">
+                <span class="input-group-text fs-1-5" id="inputGroup-sizing-default">{{ form_label(registrationForm.plainPassword) }}</span>
+            </div>
+            {{ form_widget(registrationForm.plainPassword,  {'attr': {'class' : 'form-control fs-1-5'}}) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Sign up!</button>
+    {{ form_end(registrationForm) }}
+
+</div>
+{% endblock %}

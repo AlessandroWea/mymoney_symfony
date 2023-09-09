@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MainController!{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center flex-column mt-2">
+    <h1>Add operation</h1>
+    {{ form_start(form) }}
+        <div class="">
+            {{ form_errors(form.category) }}
+        </div>
+        <div class="input-group mb-3" >
+            <div class="input-group-prepend">
+                <span class="input-group-text fs-1-5" id="inputGroup-sizing-default">{{ form_label(form.category) }}</span>
+            </div>
+                {{ form_widget(form.category, {'attr': {'class' : 'form-control fs-1-5'}}) }}
+        </div>
+        <div class="">
+            {{ form_errors(form.value) }}
+        </div>
+        <div class="input-group mb-3" >
+            <div class="input-group-prepend">
+                <span class="input-group-text fs-1-5" id="inputGroup-sizing-default">{{ form_label(form.value) }}</span>
+            </div>
+                {{ form_widget(form.value, {'attr': {'class' : 'form-control fs-1-5'}}) }}
+        </div>
+        <div class="text-danger">
+            {{ form_errors(form.comment) }}
+        </div>
+        <div class="input-group mb-3" >
+            <div class="input-group-prepend">
+                <span class="input-group-text fs-1-5" id="inputGroup-sizing-default">{{ form_label(form.comment) }}</span>
+            </div>
+            {{ form_widget(form.comment,  {'attr': {'class' : 'form-control fs-1-5'}}) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add!</button>
+    {{ form_end(form) }}
+  {# <button disabled class="btn btn-success" style="width:100px"type="button">Add</button> #}
+</div>
+
+{% endblock %}

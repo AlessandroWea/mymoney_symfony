@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MainController!{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center align-items-center flex-column mt-2">
+    <form method="post" class="mb-1">
+      <input id="datePicker" value="{{ date }}" style="width: 150px" type="date" name="date" id="">
+      <button class="btn btn-secondary p-1">go to</button>
+    </form>
+
+    <p class="mb-0">Total income: {{ total_income }}</p>
+    <p class="mb-0">Total expensis: {{ total_expensis }}</p>
+    <table class="table table-bordered">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Income/Expensis</th>
+      <th scope="col">Category</th>
+      <th scope="col">Comment</th>
+      <th scope="col">Value</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% if operations | length > 0 %}
+      {% for operation in operations %}
+        <tr>
+          <th scope="row">{{ loop.index }}</th>
+          <td>{{ operation.getCategory().getType() ? 'Income' : 'Expensis' }}</td>
+          <td>{{ operation.getCategory() }}</td>
+          <td>{{ operation.getComment() }}</td>
+          <td>{{ operation.getValue() }}</td>
+          <td>
+                <a class="btn btn-primary m-1" href="/edit/{{ operation.getId() }}">Edit</a>
+                <a class="btn btn-danger m-1" href="/delete/{{ operation.getId() }}">Delete</a>
+              </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan="6" class="text-center"><h2>There were no operations yet!</h2></td>
+        </tr>
+        {% endif %}
+        {# <tr>
+            <td colspan="6" class="text-center"><h2>There were no operations yet!</h2></td>
+            <td colspan="6" class="text-center"><h2>Add an account to start adding operations!</h2></td>
+        </tr> #}
+  </tbody>
+</table>
+  <a href="/add" class="btn btn-success" style="width:100px"type="button">Add</a>
+  {# <button disabled class="btn btn-success" style="width:100px"type="button">Add</button> #}
+  <nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link" href="/?page={{ prev_page }}">Previous</a></li>
+    <li class="page-item"><a class="page-link" href="/?page={{ next_page }}">Next</a></li>
+  </ul>
+</nav>
+</div>
+
+{% endblock %}
