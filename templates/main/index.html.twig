@@ -39,7 +39,11 @@
         {% endfor %}
         {% else %}
         <tr>
-            <td colspan="6" class="text-center"><h2>There were no operations yet!</h2></td>
+            {% if app.session.get('active_account_id') == null %}
+            <td colspan="6" class="text-center"><h2>Add an account first!</h2></td>
+            {% else %}
+              <td colspan="6" class="text-center"><h2>There were no operations yet!</h2></td>
+            {% endif %}
         </tr>
         {% endif %}
         {# <tr>
@@ -48,7 +52,11 @@
         </tr> #}
   </tbody>
 </table>
-  <a href="/add" class="btn btn-success" style="width:100px"type="button">Add</a>
+  {% if app.session.get('active_account_id') != null %}
+    <a href="/add" class="btn btn-success" style="width:100px"type="button">Add</a>
+  {% else %}
+    <button class="btn btn-success disabled" disabled style="width:100px"type="button">Add</button>
+  {% endif %}
   {# <button disabled class="btn btn-success" style="width:100px"type="button">Add</button> #}
   <nav aria-label="Page navigation example">
   <ul class="pagination">

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello WalletController!{% endblock %}
+
+{% block body %}
+<div class="container d-flex flex-column mt-2">
+    <div class="text-center">
+        <H1>Wallet</H1>
+        <h4>Net: {{ net }} rub</h4>
+    </div>
+
+    <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Value</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if accounts | length > 0 %}
+        {% for account in accounts %}
+          <tr>
+              <th scope="row">{{ loop.index}}</th>
+              <td>{{ account.name }}</td>
+              <td>{{ account.value }} rub</td>
+              <td>
+                <a class="btn btn-primary" href="/wallet/edit/{{ account.id }}">Edit</a>
+                <a class="btn btn-danger" href="/wallet/delete/{{ account.id }}">Delete</a>
+                {% if account.id != app.session.get('active_account_id') %}
+                    <a class="btn btn-secondary" href="/wallet/switch/{{ account.id }}">Switch to</a>
+                {% endif %}
+              </td>
+          </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="4" class="text-center"><h2>There are no accounts yet!</h2></td>
+        </tr>
+    {% endif %}
+  </tbody>
+</table>
+   <div class="text-center">
+        <a class="btn btn-success pr-4 pl-4" href="/wallet/add">+</a>
+   </div>
+</div>
+{% endblock %}

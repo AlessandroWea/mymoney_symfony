@@ -25,22 +25,28 @@ class MainController extends AbstractController
                         OperationRepository $or): Response
     {
         $page = max(1, $request->query->getInt('page', 1));
-        $date = $_SESSION['active_date'] ?? date('Y-m-d');
-
+        $date = $session->get('active_date') ?? date('Y-m-d');
         if($request->request->has('date'))
         {
             $date = $request->request->get('date');
-            $_SESSION['active_date'] = $date;
+            $session->set('active_date', $date);
         }
 
         $end_date = date('Y-m-d', strtotime('+ 1 day', strtotime($date)));
 
         $activeAccountId = $session->get('active_account_id');
         $account = $ar->findOneBy(['id'=>$activeAccountId]);
-        $operations = $or->getOperationPaginatorByDateAndAccount($account, $page, $date, $end_date);
+        $operations = [];
+        $total_income = 0;
+        $total_expensis = 0;
 
-        $total_income = $or->getTotalValueByType($account, 1, $date, $end_date ) ?? 0;
-        $total_expensis = $or->getTotalValueByType($account, 0, $date, $end_date) ?? 0;
+        if($account)
+        {
+            $operations = $or->getOperationPaginatorByDateAndAccount($account, $page, $date, $end_date);
+
+            $total_income = $or->getTotalValueByType($account, 1, $date, $end_date ) ?? 0;
+            $total_expensis = $or->getTotalValueByType($account, 0, $date, $end_date) ?? 0;
+        }
 
         return $this->render('main/index.html.twig', [
             'date' => $date,
@@ -56,13 +62,16 @@ class MainController extends AbstractController
     public function add(Request $request,
                         EntityManagerInterface $entityManager): Response
     {
+        $account_id = $request->getSession()->get('active_account_id');
+        if($account_id == null)
+            return $this->redirectToRoute('app_main');
+
         $operation = new Operation;
         $form = $this->createForm(AddOperationType::class, $operation);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $account_id = $request->getSession()->get('active_account_id');
+        if ($form->isSubmitted() && $form->isValid())
+        {
             $account = $entityManager->getRepository(Account::class)->findOneBy(['id' => $account_id]);
             $operation->setAccount($account);
             $entityManager->persist($operation);
