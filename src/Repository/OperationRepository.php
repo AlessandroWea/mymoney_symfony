@@ -65,9 +65,30 @@ class OperationRepository extends ServiceEntityRepository
            ->getQuery()
            ->getSingleResult()[1]
        ;
-
-
    }
+
+   public function getTotalValueByTypeWithCategory(Account $account, $type, $start_date, $end_date)
+   {
+        $builder = $this->createQueryBuilder('o')
+            ->select('c.name, SUM(o.value) value')
+            ->andWhere('o.account = :acc')
+            ->Join('o.category', 'c')
+            ->andWhere('c.type = :type')
+            ->setParameter('acc', $account)
+            ->setParameter('type', $type)
+            ->groupBy('c.name');
+
+        if($start_date != '' && $end_date != '')
+        {
+            $builder
+                ->andWhere('o.date >= :startDate')
+                ->andWhere('o.date < :endDate')
+                ->setParameter('startDate', $start_date)
+                ->setParameter('endDate', $end_date);
+        }
+
+        return $builder->getQuery()->getResult();
+    }
 //    public function findOneBySomeField($value): ?Operation
 //    {
 //        return $this->createQueryBuilder('o')
